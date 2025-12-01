@@ -140,12 +140,24 @@ class CrossAttentionLayer(nn.Module):
         # TODO: Cross-attention
         # Be sure to use the correct arguments for the multi-head attention layer
         # Set need_weights to True and average_attn_weights to True so we can get the attention weights 
-        x, mha_attn_weights = NotImplementedError, NotImplementedError
+        res = x
+        x = self.norm(x)
+        
+        x, mha_attn_weights = self.mha(
+            query=x,
+            key=y,
+            value=y,
+            key_padding_mask=key_padding_mask,
+            attn_mask=attn_mask,
+            need_weights=True,
+            average_attn_weights=True
+        )
+        x = res + self.dropout(x)
         
         # NOTE: For some regularization you can apply dropout and then add residual connection
         
         # TODO: Return the output tensor and attention weights
-        raise NotImplementedError # Remove once implemented
+        return x, mha_attn_weights # Remove once implemented
     
 ## -------------------------------------------------------------------------------------------------  
 class FeedForwardLayer(nn.Module):
