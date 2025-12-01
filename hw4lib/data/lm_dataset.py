@@ -134,7 +134,7 @@ class LMDataset(Dataset):
     def __len__(self) -> int:
         """Returns the number of samples in the dataset."""
         # TODO: Implement __len__
-        raise self.length
+        return self.length
 
     def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor]:
         """
@@ -151,7 +151,7 @@ class LMDataset(Dataset):
         # TODO: Implement __getitem__
         # Make sure you convert to the right type
         shifted = torch.LongTensor(self.transcripts_shifted[idx])
-        golden  = torch.LongTensor(self.transcripts_shifted[idx])
+        golden  = torch.LongTensor(self.transcripts_golden[idx])
         return shifted, golden
     
     
