@@ -26,9 +26,10 @@ def PadMask(padded_input, input_lengths):
             - non-padding positions are marked with False.
     """
     # TODO: Implement PadMask
+    device = padded_input.device
     N, T = padded_input.shape[:2]
-    x = torch.arange(T)[None, :]
-    mask = x >= input_lengths[:, None]
+    x = torch.arange(T, device=device)[None, :]
+    mask = x >= input_lengths[:, None].to(device)
     return mask # Remove once implemented
 
 ''' 
