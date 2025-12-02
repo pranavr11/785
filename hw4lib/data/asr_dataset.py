@@ -305,7 +305,7 @@ class ASRDataset(Dataset):
 
         # TODO: Handle transcripts for non-test partitions
         padded_shifted, padded_golden, transcript_lengths = None, None, None
-        if self.partition != "test-clean":
+        if self.partition != "test-clean" and batch[0][1] is not None:
             # TODO: Collect shifted and golden transcripts from the batch into a list of tensors (B x T)  
             # Note: Use list comprehension to collect the transcripts from the batch   
             batch_shifted      = [b[1] for b in batch] # B x T
