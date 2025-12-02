@@ -305,7 +305,7 @@ class ASRDataset(Dataset):
 
         # TODO: Handle transcripts for non-test partitions
         padded_shifted, padded_golden, transcript_lengths = None, None, None
-        if self.partition != "test-clean" and batch[0][1] is not None:
+        if self.partition != "test-clean":
             # TODO: Collect shifted and golden transcripts from the batch into a list of tensors (B x T)  
             # Note: Use list comprehension to collect the transcripts from the batch   
             batch_shifted      = [b[1] for b in batch] # B x T
@@ -313,7 +313,7 @@ class ASRDataset(Dataset):
 
             # TODO: Collect transcript lengths from the batch into a tensor
             # Note: Use list comprehension to collect the transcript lengths from the batch   
-            transcript_lengths = torch.tensor( [len(feat) for feat in batch_shifted], dtype=torch.long )  # B  
+            transcript_lengths = torch.tensor( [len(feat) for feat in batch_shifted])  # B  
 
             # TODO: Pad transcripts to create a batch of fixed-length padded transcripts
             # Note: Use torch.nn.utils.rnn.pad_sequence to pad the transcripts (use pad_token as the padding value)
