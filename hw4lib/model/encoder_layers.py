@@ -50,7 +50,6 @@ class SelfAttentionEncoderLayer(nn.Module):
             d_model=d_model,
             num_heads=num_heads,
             dropout=dropout,
-            causal=False  
         ) 
         self.ffn = FeedForwardLayer(
             d_model=d_model,
