@@ -421,6 +421,7 @@ class EncoderDecoderTransformer(nn.Module):
         # TODO: Implement decode
 
         # TODO: Create target padding mask on the same device as the input
+        device = padded_targets.device
         pad_mask_tgt = None
         if target_lengths is not None:
             pad_mask_tgt = PadMask(padded_targets, target_lengths).to(device)
