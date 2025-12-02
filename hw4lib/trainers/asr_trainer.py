@@ -147,7 +147,7 @@ class ASRTrainer(BaseTrainer):
             if not torch.isfinite(loss):
                 print("Non-finite loss. ce_loss:", ce_loss.item(),
                 "ctc_loss:", ctc_loss.item() if self.ctc_weight > 0 else 0.0)
-            continue
+                continue
 
             # TODO: Backpropagate the loss
             self.scaler.scale(loss).backward()
