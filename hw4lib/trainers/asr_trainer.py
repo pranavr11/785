@@ -368,9 +368,10 @@ class ASRTrainer(BaseTrainer):
 
         if recognition_config is None:
             # Default config (greedy search)
+            # NAH USE BEAM
             recognition_config = {
                 'num_batches': 5,
-                'beam_width': 1,
+                'beam_width': 10,
                 'temperature': 1.0,
                 'repeat_penalty': 1.0,
                 'lm_weight': 0.0,
@@ -719,6 +720,13 @@ class ProgressiveTrainer(ASRTrainer):
         print(f"├── Dropout: {stage_config['dropout']}")
         print(f"├── Label Smoothing: {stage_config['label_smoothing']}")
         
+        if "ctc_weight" in stage_config:
+            self.ctc_weight = stage_config["ctc_weight"]
+            if self.ctc_weight == 0:
+                print("│   ├── CTC disabled for this stage.")
+            else:
+                print(f"│   ├── CTC weight set to {self.ctc_weight}.")
+
         # Update dropout and label smoothing
         self.model.dropout.p = stage_config['dropout']
         self.ce_criterion = nn.CrossEntropyLoss(
