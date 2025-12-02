@@ -308,8 +308,8 @@ class ASRDataset(Dataset):
         if self.partition != "test-clean":
             # TODO: Collect shifted and golden transcripts from the batch into a list of tensors (B x T)  
             # Note: Use list comprehension to collect the transcripts from the batch   
-            batch_shifted      = [b[1].T for b in batch] # B x T
-            batch_golden       = [b[2].T for b in batch] # B x T
+            batch_shifted      = [b[1] for b in batch] # B x T
+            batch_golden       = [b[2] for b in batch] # B x T
 
             # TODO: Collect transcript lengths from the batch into a tensor
             # Note: Use list comprehension to collect the transcript lengths from the batch   
