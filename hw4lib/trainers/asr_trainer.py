@@ -120,18 +120,18 @@ class ASRTrainer(BaseTrainer):
                 running_att = curr_att
                 
                 # TODO: Calculate CE loss
-                ce_loss = self.ce_criterion(seq_out.reshape(-1, seq_out.shape[-1]), targets_golden.reshape(-1))
+                ce_loss = self.ce_criterion(seq_out.float().reshape(-1, seq_out.shape[-1]), targets_golden.reshape(-1))
                 
                 
                 # TODO: Calculate CTC loss if needed
-                if self.ctc_weight > 0:
-                    ctc_lengths=ctc_inputs['lengths']
-                    ctc_probs = ctc_inputs['log_probs']
-                    ctc_loss = self.ctc_criterion(ctc_probs, targets_golden, ctc_lengths, transcript_lengths)
-                    loss = ce_loss + self.ctc_weight * ctc_loss
-                else:
-                    ctc_loss = torch.tensor(0.0)
-                    loss = ce_loss
+            if self.ctc_weight > 0:
+                ctc_lengths=ctc_inputs['lengths']
+                ctc_probs = ctc_inputs['log_probs'].float()
+                ctc_loss = self.ctc_criterion(ctc_probs, targets_golden, ctc_lengths, transcript_lengths)
+                loss = ce_loss + self.ctc_weight * ctc_loss
+            else:
+                ctc_loss = torch.tensor(0.0)
+                loss = ce_loss
 
             # Calculate metrics
             batch_tokens = transcript_lengths.sum().item()
@@ -143,6 +143,11 @@ class ASRTrainer(BaseTrainer):
             
             # Normalize loss by accumulation steps
             loss = loss / self.config['training']['gradient_accumulation_steps']
+            
+            if not torch.isfinite(loss):
+                print("Non-finite loss. ce_loss:", ce_loss.item(),
+                "ctc_loss:", ctc_loss.item() if self.ctc_weight > 0 else 0.0)
+            continue
 
             # TODO: Backpropagate the loss
             self.scaler.scale(loss).backward()
