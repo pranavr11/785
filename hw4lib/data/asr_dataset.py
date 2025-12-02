@@ -317,8 +317,8 @@ class ASRDataset(Dataset):
 
             # TODO: Pad transcripts to create a batch of fixed-length padded transcripts
             # Note: Use torch.nn.utils.rnn.pad_sequence to pad the transcripts (use pad_token as the padding value)
-            padded_shifted     = pad_sequence(padded_shifted, batch_first=True, padding_value=self.pad_token) # B x T
-            padded_golden      = pad_sequence(padded_golden, batch_first=True, padding_value=self.pad_token) # B x T
+            padded_shifted     = pad_sequence(batch_shifted, batch_first=True, padding_value=self.pad_token) # B x T
+            padded_golden      = pad_sequence(batch_golden, batch_first=True, padding_value=self.pad_token) # B x T
 
         # TODO: Apply SpecAugment for training
         if self.config["specaug"] and self.isTrainPartition:
